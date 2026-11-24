@@ -1,0 +1,23 @@
+# Private settings and generated secrets
+.env
+.env.*
+!.env.sample
+/secrets/*
+!/secrets/*.example
+
+# Persistent runtime files
+/foundry03/data/**
+!/foundry03/data/.gitkeep
+/foundry03/logs/**
+!/foundry03/logs/.gitkeep
+
+# Local testing artifacts
+/scripts/testing/testing.env
+/scripts/testing/auth/
+/scripts/testing/results/
+/scripts/testing/node_modules/
+**/__pycache__/
+*.pyc
+*.tmp
+*.swp
+.DS_Store

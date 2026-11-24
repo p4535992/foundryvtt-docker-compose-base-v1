@@ -1,0 +1,14 @@
+# One service, retained from the base-v2 development layout.
+include:
+  - path: ./foundry03/docker-compose.template.yml
+    project_directory: .
+
+networks:
+  foundry-net:
+    driver: bridge
+
+secrets:
+  foundry03_config:
+    file: ./secrets/foundry03.json
+
+name: ${STACK_PROJECT_NAME:-foundryvtt-dev}

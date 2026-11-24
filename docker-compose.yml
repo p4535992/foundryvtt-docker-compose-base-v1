@@ -1,0 +1,51 @@
+# Generated from templates. Do not edit manually.
+
+services:
+  foundry03:
+    image: "ghcr.io/felddy/foundryvtt:${FOUNDRY03_IMAGE_TAG:-14}"
+    hostname: "${FOUNDRY03_HOSTNAME:-foundry03}"
+    restart: unless-stopped
+    stop_grace_period: 120s
+    mem_limit: "${FOUNDRY03_MEM_LIMIT:-1152m}"
+    ports:
+      - "${FOUNDRY03_BIND_IP:-127.0.0.1}:${FOUNDRY03_HOST_PORT:-30000}:30000/tcp"
+    environment:
+      TZ: "${FOUNDRY03_TIMEZONE:-Europe/Rome}"
+      FOUNDRY_PORT: "30000"
+      FOUNDRY_ROUTE_PREFIX: ""
+      FOUNDRY_PROXY_SSL: "false"
+      FOUNDRY_UPNP: "false"
+      FOUNDRY_TELEMETRY: "${FOUNDRY03_TELEMETRY:-false}"
+      FOUNDRY_LOG_SIZE: "${FOUNDRY03_LOG_SIZE:-64m}"
+      FOUNDRY_MAX_LOGS: "${FOUNDRY03_MAX_LOGS:-10}"
+      FOUNDRY_LANGUAGE: "${FOUNDRY03_LANGUAGE:-en.core}"
+      FOUNDRY_COMPRESS_WEBSOCKET: "${FOUNDRY03_COMPRESS_WEBSOCKET:-false}"
+      CONTAINER_PRESERVE_CONFIG: "${FOUNDRY03_PRESERVE_CONFIG:-false}"
+      FOUNDRY_NO_BACKUPS: "${FOUNDRY03_NO_BACKUPS:-false}"
+      FOUNDRY_WORLD: "${FOUNDRY03_WORLD:-}"
+    secrets:
+      - source: foundry03_config
+        target: config.json
+    volumes:
+      - ./foundry03/data:/data
+      - ./foundry03/logs:/data/Logs
+    security_opt:
+      - no-new-privileges:true
+    # The felddy distribution supplies its own healthcheck.
+    logging:
+      driver: json-file
+      options:
+        max-size: "${FOUNDRY03_LOG_MAX_SIZE:-10m}"
+        max-file: "${FOUNDRY03_LOG_MAX_FILES:-5}"
+    networks:
+      - foundry-net
+
+networks:
+  foundry-net:
+    driver: bridge
+
+secrets:
+  foundry03_config:
+    file: ./secrets/foundry03.json
+
+name: ${STACK_PROJECT_NAME:-foundryvtt-dev}
